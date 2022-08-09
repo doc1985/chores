@@ -64,7 +64,7 @@ public class AuthController {
 
 				new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 			} catch (Exception e) {
-				System.out.println("JWT Token has expired");
+				throw new RuntimeException("token is expired");
 			}
 		} else {
 			throw new RuntimeException("token is missing");

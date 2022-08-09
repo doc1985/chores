@@ -1,9 +1,14 @@
 package com.chorley.app.chorelyapp.daos;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +23,21 @@ public class FamilyDao {
 	private String password;
 	
 	private String name;
+	
+	@OneToMany(
+		mappedBy = "family",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+	private List<UserDao> users = new ArrayList<>();
+
+	public List<UserDao> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<UserDao> users) {
+		this.users = users;
+	}
 
 	public long getId() {
 		return id;

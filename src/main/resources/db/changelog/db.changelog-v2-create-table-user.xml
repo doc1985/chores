@@ -11,6 +11,16 @@
 	            <constraints primaryKey="true" nullable="false"/>
 	        </column>
 	        <column name="first_name" type="varchar(50)"/> 
+	        <column name="family_id" type="BIGINT">
+        	</column>
 	    </createTable>
+	    
+	    <addForeignKeyConstraint baseColumnNames="family_id"
+                             baseTableName="user"
+                             constraintName="fk_family_user"
+                             referencedColumnNames="id"
+                             referencedTableName="family"
+                             onDelete="CASCADE"
+                             onUpdate="CASCADE"/>
     </changeSet>
 </databaseChangeLog>

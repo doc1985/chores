@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,7 +28,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-	private static final String APPLICTION_JSON_VALUE = "application/json";
 	private AuthenticationManager authenticationManager;
 	private String secret;
 	
@@ -51,21 +51,19 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 			Authentication authResult) throws IOException, ServletException {
 		User user = (User) authResult.getPrincipal();
 		Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
-		Date expired = new Date(System.currentTimeMillis() + 1 * 60 * 1000 * 60 * 24 * 14);
+		Date access_expiration = new Date(System.currentTimeMillis() + 1 * 1000 * 60 * 60);
+		Date refresh_expiration = new Date(System.currentTimeMillis() + 1 * 1000 * 60 * 60 * 24 * 14);
 
-		String accessToken = JWT.create().withSubject(user.getUsername()).withExpiresAt(expired)
+		String accessToken = JWT.create().withSubject(user.getUsername()).withExpiresAt(access_expiration)
 				.withIssuer(request.getRequestURL().toString()).withClaim("roles", new ArrayList<>()).sign(algorithm);
 
-		String refreshToken = JWT.create().withSubject(user.getUsername()).withExpiresAt(expired)
+		String refreshToken = JWT.create().withSubject(user.getUsername()).withExpiresAt(refresh_expiration)
 				.withIssuer(request.getRequestURL().toString()).sign(algorithm);
-
-		// response.setHeader("access_token", accessToken);
-		// response.setHeader("refresh_token", refreshToken);
 
 		Map<String, String> tokens = new HashMap<>();
 		tokens.put("access_token", accessToken);
 		tokens.put("refresh_token", refreshToken);
-		response.setContentType(APPLICTION_JSON_VALUE);
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
 		new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 

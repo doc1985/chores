@@ -1,4 +1,4 @@
-package com.chorley.app.chorelyapp.dtos;
+package com.chorley.app.chorelyapp.dtos.authentication;
 
 import java.io.Serializable;
 

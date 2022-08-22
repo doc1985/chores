@@ -30,6 +30,21 @@ public class FamilyDao {
         orphanRemoval = true
     )
 	private List<UserDao> users = new ArrayList<>();
+	
+	@OneToMany(
+		mappedBy = "family",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+	private List<ChoreDao> chores = new ArrayList<>();
+
+	public List<ChoreDao> getChores() {
+		return chores;
+	}
+
+	public void setChores(List<ChoreDao> chores) {
+		this.chores = chores;
+	}
 
 	public List<UserDao> getUsers() {
 		return users;

@@ -37,6 +37,21 @@ public class FamilyDao {
         orphanRemoval = true
     )
 	private List<ChoreDao> chores = new ArrayList<>();
+	
+	@OneToMany(
+			mappedBy = "family",
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true
+	    )
+	private List<RewardDao> rewards = new ArrayList<>();
+
+	public List<RewardDao> getRewards() {
+		return rewards;
+	}
+
+	public void setRewards(List<RewardDao> rewards) {
+		this.rewards = rewards;
+	}
 
 	public List<ChoreDao> getChores() {
 		return chores;

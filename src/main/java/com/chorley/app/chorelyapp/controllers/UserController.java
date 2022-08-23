@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,5 +30,12 @@ public class UserController {
 	
 		URI location = URI.create(request.getServletPath());
 	    return ResponseEntity.created(location).build();
+	}
+	
+	@DeleteMapping("/{userId}")
+	public ResponseEntity<?> deleteUser(@PathVariable long userId, Principal principal) throws Exception {
+		userOrchastrator.deleteUser(userId, principal);
+		
+		return ResponseEntity.ok().build();
 	}
 }

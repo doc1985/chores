@@ -1,6 +1,9 @@
 package com.chorley.app.chorelyapp.orchastrators;
 
 import java.security.Principal;
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,15 @@ public class UserOrchastratorImpl implements UserOrchastrator {
 		UserDao user = userService.createUser(model, family);
 		
 		return new NewUserResponseDto(user.getId(), user.getFirstName());
+	}
+
+	@Override
+	public void deleteUser(long userId, Principal principal) throws Exception {
+		FamilyDao family = familyService.getFamilyByEmail(principal.getName());
+		
+		Optional<UserDao> user = userService.findOneByIdAndFamilyId(userId, family.getId());
+		
+		userService.deleteUser(user.orElseThrow(EntityNotFoundException::new));
 	}
 
 }

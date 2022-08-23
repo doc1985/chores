@@ -7,5 +7,5 @@ import com.chorley.app.chorelyapp.daos.ChoreDao;
 
 @Repository
 public interface ChoreRepository extends JpaRepository<ChoreDao, Long> {
-
+	public ChoreDao findByFamilyIdAndId(long familyId, long choreId);
 }

@@ -1,6 +1,8 @@
 package com.chorley.app.chorelyapp.services;
 
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,22 @@ public class ChoreServiceImpl implements ChoreService {
 		
 		choreRepository.save(chore);
 
+	}
+
+	@Override
+	public ChoreDao getChoreByIdAndFamily(FamilyDao family, int choreId) throws Exception {
+		ChoreDao chore = choreRepository.findByFamilyIdAndId(family.getId(), choreId);
+		
+		if (chore == null) {
+			throw new EntityNotFoundException();
+		}
+		
+		return chore;
+	}
+
+	@Override
+	public void deleteChore(ChoreDao chore) throws Exception {
+		choreRepository.delete(chore);
 	}
 
 }
